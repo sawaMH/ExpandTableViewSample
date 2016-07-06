@@ -40,7 +40,16 @@ class ExpandTableViewController: UITableViewController {
     @objc private func sectionHeaderTaped(recognizer: UITapGestureRecognizer) {
         let headerView = recognizer.view as! ExpandTableHeaderView
         self.sectionItems[headerView.section].expanded = !self.sectionItems[headerView.section].expanded
-        self.tableView.reloadSections(NSIndexSet(index: headerView.section), withRowAnimation: UITableViewRowAnimation.Fade)
+        
+        var indexPaths = [NSIndexPath]()
+        for row in 0...(self.sectionItems[headerView.section].values.count - 1) {
+            indexPaths.append(NSIndexPath(forRow: row, inSection: headerView.section))
+        }
+        if self.sectionItems[headerView.section].expanded == true {
+            self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
+        } else {
+            self.tableView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
+        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
